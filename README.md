@@ -71,6 +71,48 @@ to call `this.emit(this.onFooBar, ...)`, where `this.onFooBar` is the event to
 emit and `...` any number of parameters, that will be passed to the listeners.
 
 
+### JavaScript
+
+Your JavaScript host (i.e., your browser, node.js, etc.) should support classes
+and inheritance in order to work correctly. The code shown above can also be
+written in JavaScript (node.js):
+
+~~~JavaScript
+const EventEmitter = require('typed-event-emitter').EventEmitter;
+
+class MyClass extends EventEmitter {
+  constructor(value) {
+    // initialize EventEmitter
+    super();
+    
+    /* newValue: number */
+    this.onValueChanged = this.registerEvent();
+    
+    this._value = value;
+  }
+  
+  get value() {
+    return this._value;
+  }
+  
+  set value(value) {
+    this._value = value;
+    this.emit(this.onValueChanged, this._value);
+  }
+}
+ 
+let instance = new MyClass();
+instance.onValueChanged(newValue => {
+  console.log(`Value changed: ${newValue}`);
+});
+ 
+instance.value = 27;
+~~~
+
+Node that the events are registered explicitly within the constructor. Make sure
+to initialize them *after* calling `super()`.
+
+
 ## License
 
 typed-event-emitter is licensed under the ISC License.

@@ -7,8 +7,15 @@ your class. Consequently, the style of binding and emitting events differs a
 little bit, ensuring already at binding time that the events actually exists.
 
 
-## Usage
+## Install
 
+Via npm:
+
+    $ npm install typed-event-emitter
+
+
+## Usage
+      
 Take a look at the following snippet (TypeScript):
 
 ~~~TypeScript
@@ -44,11 +51,11 @@ instance.onValueChanged(newValue => {
 instance.value = 27;
 ~~~
 
-First the *EventEmitter* is loaded from the module. Next, any class, that shall
-emit events, must extend that *EventEmitter*. If your class has its own
-constructor, make sure to call `super()`.
+First, the *EventEmitter* is loaded from the module. Any class, that shall emit
+events, must extend that *EventEmitter*. If your class has its own constructor,
+make sure to call `super()`.
 
-Any events, your class could emit, must be registered in the form:
+Any events, your class shall be able to emit, must be registered in the form:
 
 ~~~TypeScript
 onFooBar = this.registerEvent<callbackType>();

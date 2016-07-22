@@ -1,6 +1,6 @@
 {
   "name": "typed-event-emitter",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Alternative event emitter for JavaScript and TypeScript.",
   "main": "index.js",
   "scripts": {
@@ -16,15 +16,17 @@
     "emitter"
   ],
   "author": "Simon \"Tenry\" Burchert",
+  "homepage": "https://github.com/tenry92/typed-event-emitter",
   "repository": {
     "type": "git",
-    "url": "https://github.com/tenry92/typed-event-emitter"
+    "url": "https://github.com/tenry92/typed-event-emitter.git"
   },
   "license": "ISC",
   "devDependencies": {
     "typescript": ">=1.5"
   },
   "files": [
-    "index.js"
+    "index.js",
+    "index.d.ts"
   ]
 }

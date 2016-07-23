@@ -115,4 +115,4 @@ to initialize them *after* calling `super()`.
 
 ## License
 
-typed-event-emitter is licensed under the ISC License.
+typed-event-emitter is licensed under the MIT License.

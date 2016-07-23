@@ -1,6 +1,6 @@
 {
   "name": "typed-event-emitter",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Alternative event emitter for JavaScript and TypeScript.",
   "main": "index.js",
   "scripts": {
@@ -21,7 +21,7 @@
     "type": "git",
     "url": "https://github.com/tenry92/typed-event-emitter.git"
   },
-  "license": "ISC",
+  "license": "MIT",
   "devDependencies": {
     "typescript": ">=1.5"
   },

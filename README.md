@@ -18,7 +18,7 @@ Via npm:
       
 Take a look at the following snippet (TypeScript):
 
-~~~TypeScript
+~~~ts
 import { EventEmitter } from 'typed-event-emitter';
 
 class MyClass extends EventEmitter {
@@ -43,7 +43,7 @@ class MyClass extends EventEmitter {
   }
 }
 
-let instance = new MyClass();
+let instance = new MyClass(0);
 instance.onValueChanged(newValue => {
   console.log(`Value changed: ${newValue}`);
 });
@@ -57,7 +57,7 @@ make sure to call `super()`.
 
 Any events, your class shall be able to emit, must be registered in the form:
 
-~~~TypeScript
+~~~ts
 onFooBar = this.registerEvent<callbackType>();
 ~~~
 
@@ -77,7 +77,7 @@ Your JavaScript host (i.e., your browser, node.js, etc.) should support classes
 and inheritance in order to work correctly. The code shown above can also be
 written in JavaScript (node.js):
 
-~~~JavaScript
+~~~js
 const EventEmitter = require('typed-event-emitter').EventEmitter;
 
 class MyClass extends EventEmitter {
@@ -101,7 +101,7 @@ class MyClass extends EventEmitter {
   }
 }
  
-let instance = new MyClass();
+let instance = new MyClass(0);
 instance.onValueChanged(newValue => {
   console.log(`Value changed: ${newValue}`);
 });

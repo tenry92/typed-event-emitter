@@ -5,3 +5,4 @@ node_modules
 *.d.ts
 *.js
 *.map
+.idea

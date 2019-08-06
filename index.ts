@@ -22,6 +22,9 @@
  * EALINGS IN THE SOFTWARE.                                                   *
  ******************************************************************************/
 
+type EventHandler<Args extends any[]> = (...args: Args) => void;
+type EventBinder<Args extends any[]> = (event: EventHandler<Args>) => Listener;
+
 export class EventEmitter {
   private eventListeners: Map<Function, Function[]>;
   
@@ -29,7 +32,7 @@ export class EventEmitter {
     this.eventListeners = new Map();
   }
   
-  on(event: Function, listener: Function) {
+  on<Args extends any[]>(event: EventBinder<Args>, listener: EventHandler<Args>) {
     if(!this.eventListeners.has(event)) {
       this.eventListeners.set(event, [ listener ]);
     } else {
@@ -39,7 +42,7 @@ export class EventEmitter {
     return new Listener(this, event, listener);
   }
   
-  addListener(event: Function, listener: Function) {
+  addListener<Args extends any[]>(event: EventBinder<Args>, listener: EventHandler<Args>) {
     return this.on(event, listener);
   }
   
@@ -70,7 +73,7 @@ export class EventEmitter {
   /**
    * Emit event. Calls all bound listeners with args.
    */
-  protected emit(event: Function, ...args) {
+  protected emit<Args extends any[]>(event: EventBinder<Args>, ...args: Args) {
     if(this.eventListeners.has(event)) {
       for(var listener of this.eventListeners.get(event)) {
         listener(...args);
@@ -81,8 +84,8 @@ export class EventEmitter {
   /**
    * @typeparam T The event handler signature.
    */
-  registerEvent<T extends Function>() {
-    let eventBinder = (handler: T) => {
+  registerEvent<Args extends any[]>() {
+		const eventBinder: EventBinder<Args> = handler => {
       return this.addListener(eventBinder, handler);
     };
     

@@ -4,7 +4,7 @@
   "description": "Alternative event emitter for JavaScript and TypeScript.",
   "main": "index.js",
   "scripts": {
-    "prepublish": "tsc"
+    "prepare": "tsc"
   },
   "keywords": [
     "event-emitter",

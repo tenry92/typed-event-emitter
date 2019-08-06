@@ -113,6 +113,23 @@ Node that the events are registered explicitly within the constructor. Make sure
 to initialize them *after* calling `super()`.
 
 
+## Changelog
+
+
+### 2.0.0 (2019-08-06)
+
+ - Make methods more type safe. This is a breaking change if used in a TypeScript
+ project (rather than plain JavaScript), as this requires TypeScript 3.0+.
+
+### 1.1.0 (2018-10-01)
+
+ - Add support for ES5.
+
+### 1.0.0 (2016-07-18)
+
+ - Initial release.
+
+
 ## License
 
 typed-event-emitter is licensed under the MIT License.

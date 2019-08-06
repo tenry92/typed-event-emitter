@@ -84,8 +84,8 @@ export class EventEmitter {
   /**
    * @typeparam T The event handler signature.
    */
-  registerEvent<Args extends any[]>() {
-		const eventBinder: EventBinder<Args> = handler => {
+  registerEvent<T extends EventHandler<any[]>>() {
+    const eventBinder = (handler: T): Listener => {
       return this.addListener(eventBinder, handler);
     };
     

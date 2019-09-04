@@ -6,9 +6,11 @@
     "noImplicitAny": false,
     "outDir": ".",
     "sourceMap": true,
-    "declaration": true
+    "declaration": true,
+    "types": [],
   },
   "files": [
     "index.ts"
-  ]
+  ],
+  "exclude": ["./node_modules/**"]
 }

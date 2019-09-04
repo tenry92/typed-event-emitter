@@ -6,3 +6,4 @@ node_modules
 *.js
 *.map
 .idea
+es

@@ -5,7 +5,7 @@
   "main": "index.js",
   "module": "es/index.js",
   "scripts": {
-    "prepare": "tsc && tsc -p tsconfig.json -m es2015 --outDir es -declaration false"
+    "prepare": "tsc && tsc -p tsconfig.json -m es2015 --outDir es -d false"
   },
   "keywords": [
     "event-emitter",
@@ -29,6 +29,7 @@
   "files": [
     "index.js",
     "index.d.ts",
+    "es/*",
     "README.md"
   ]
 }

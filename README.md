@@ -22,7 +22,7 @@ Take a look at the following snippet (TypeScript):
 import { EventEmitter } from 'typed-event-emitter';
 
 class MyClass extends EventEmitter {
-  onValueChanged = this.registerEvent<(newValue: number) => any>();
+  public readonly onValueChanged = this.registerEvent<[number]>();
   
   private _value: number;
   
@@ -51,31 +51,29 @@ instance.onValueChanged(newValue => {
 instance.value = 27;
 ~~~
 
-First, the *EventEmitter* is loaded from the module. Any class, that shall emit
-events, must extend that *EventEmitter*. If your class has its own constructor,
+First, the *EventEmitter* is loaded from the module. Any class that shall emit
+events must extend that *EventEmitter*. If your class has its own constructor,
 make sure to call `super()`.
 
-Any events, your class shall be able to emit, must be registered in the form:
+Any events your class shall be able to emit must be registered in the form:
 
 ~~~ts
-onFooBar = this.registerEvent<callbackType>();
+onFooBar = this.registerEvent<callbackArgTypes>();
 ~~~
 
 Where `onFooBar` can be any name (it doesn't need to begin with *on*) and
-`callbackType` must be the type of the function the listeners must have. With
-this, you can see the signature your function must have when you're about to
-bind a listener to that event.
+`callbackArgTypes` must be an array of the argument types the callback accepts.
+With this, you can see the signature your function must have when you're about
+to bind a listener to that event.
 
 To fire/emit an event (only possible from within your event emitter), you have
 to call `this.emit(this.onFooBar, ...)`, where `this.onFooBar` is the event to
-emit and `...` any number of parameters, that will be passed to the listeners.
+emit and `...` any number of parameters that will be passed to the listeners.
 
 
 ### JavaScript
 
-Your JavaScript host (i.e., your browser, node.js, etc.) should support classes
-and inheritance in order to work correctly. The code shown above can also be
-written in JavaScript (node.js):
+The code shown above can also be written in JavaScript (node.js):
 
 ~~~js
 const EventEmitter = require('typed-event-emitter').EventEmitter;
@@ -109,12 +107,18 @@ instance.onValueChanged(newValue => {
 instance.value = 27;
 ~~~
 
-Node that the events are registered explicitly within the constructor. Make sure
+Note that the events are registered explicitly within the constructor. Make sure
 to initialize them *after* calling `super()`.
 
 
 ## Changelog
 
+
+### 3.0.0 (2021-09-07)
+
+ - BREAKING CHANGE (TypeScript): `registerEvent<(arg: number) => any>()` now is
+ `registerEvent<[number]>()`
+ - Add unit tests (run `npm test`)
 
 ### 2.0.0 (2019-08-06)
 

@@ -22,61 +22,91 @@
  * EALINGS IN THE SOFTWARE.                                                   *
  ******************************************************************************/
 
+/**
+ * Generic for callback function with any arguments.
+ */
 type EventHandler<Args extends any[]> = (...args: Args) => void;
+
+/**
+ * Generic for function that accepts EventHandler (callback) and returns a new
+ * instance of Listener.
+ */
 type EventBinder<Args extends any[]> = (event: EventHandler<Args>) => Listener;
 
 export class EventEmitter {
-  private eventListeners: Map<Function, Function[]>;
-  
-  constructor() {
+  private eventListeners: Map<EventBinder<any>, EventHandler<any>[]>;
+
+  public constructor() {
     this.eventListeners = new Map();
   }
-  
-  on<Args extends any[]>(event: EventBinder<Args>, listener: EventHandler<Args>) {
+
+  public addListener<Args extends any[]>(event: EventBinder<Args>, callback: EventHandler<Args>): Listener {
     if(!this.eventListeners.has(event)) {
-      this.eventListeners.set(event, [ listener ]);
+      this.eventListeners.set(event, [callback]);
     } else {
-      this.eventListeners.get(event).push(listener);
+      this.eventListeners.get(event)!.push(callback);
     }
     
-    return new Listener(this, event, listener);
+    return new Listener(this, event, callback);
   }
-  
-  addListener<Args extends any[]>(event: EventBinder<Args>, listener: EventHandler<Args>) {
-    return this.on(event, listener);
+
+  /**
+   * Alias for `addListener`.
+   */
+  public on<Args extends any[]>(event: EventBinder<Args>, callback: EventHandler<Args>): Listener {
+    return this.on(event, callback);
   }
-  
-  removeListener();
-  removeListener(id: Listener);
-  removeListener(event: Function, listener?: Function);
-  
-  removeListener() {
+
+  /**
+   * Remove all listeners.
+   */
+  public removeListener(): void;
+
+  /**
+   * Remove specific listener.
+   *
+   * @param listener Listener to remove.
+   */
+  public removeListener(listener: Listener): void;
+
+  /**
+   * Remove callback function from given event.
+   *
+   * @param event Event where function might have been added to
+   * @param callback Callback function to remove from event
+   */
+  public removeListener(event: Function, callback?: Function): void;
+
+  public removeListener() {
     if(arguments.length == 0) {
+      // remove all event listeners
       this.eventListeners.clear();
     } else if(arguments.length == 1 && typeof arguments[0] == 'object') {
-      let id = arguments[0];
-      this.removeListener(id.event, id.listener);
+      // convert Listener {event, listener} to [event, listener]
+      const listener = arguments[0] as Listener;
+      this.removeListener(listener.event, listener.callback);
     } else if(arguments.length >= 1) {
-      let event = <Function>arguments[0];
-      let listener = <Function>arguments[1];
-      
+      // removeListener(event, listener)
+      const [event, listener] = Array.from(arguments) as [EventBinder<any>, EventHandler<any>];
+
       if(this.eventListeners.has(event)) {
-        var listeners = this.eventListeners.get(event);
-        var idx;
-        while(!listener || (idx = listeners.indexOf(listener)) != -1) {
-          listeners.splice(idx, 1);
-        }
+        let callbacks = this.eventListeners.get(event)!;
+        callbacks = callbacks.filter(otherListener => listener != otherListener);
+        this.eventListeners.set(event, callbacks);
       }
     }
   }
-  
+
   /**
    * Emit event. Calls all bound listeners with args.
    */
   protected emit<Args extends any[]>(event: EventBinder<Args>, ...args: Args) {
     if(this.eventListeners.has(event)) {
-      for(var listener of this.eventListeners.get(event)) {
-        listener(...args);
+      // copy array to allow removal of listeners within the callbacks
+      const callbacks = [...this.eventListeners.get(event)!];
+
+      for(const callback of callbacks) {
+        callback(...args);
       }
     }
   }
@@ -84,8 +114,8 @@ export class EventEmitter {
   /**
    * @typeparam T The event handler signature.
    */
-  registerEvent<T extends EventHandler<any[]>>() {
-    const eventBinder = (handler: T): Listener => {
+  public registerEvent<T extends any[]>() {
+    const eventBinder = (handler: EventHandler<T>): Listener => {
       return this.addListener(eventBinder, handler);
     };
     
@@ -94,13 +124,11 @@ export class EventEmitter {
 }
 
 export class Listener {
-  constructor(public owner: EventEmitter,
+  public constructor(public owner: EventEmitter,
     public event: Function,
-    public listener: Function) {
-    
-  }
-  
-  unbind() {
+    public callback: Function) {}
+
+  public unbind() {
     this.owner.removeListener(this);
   }
 }
